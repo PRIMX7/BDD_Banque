@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialiser SQLAlchemy
+# Initialiser SQLAlchemyg
 db = SQLAlchemy(app)
 
 # Définir la table User pour la base de données
@@ -53,13 +53,19 @@ def register():
         deposit = float(request.form['deposit'])
         password = request.form['password']
 
+        # Validation de la complexité du mot de passe
+        import re
+        password_regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$')
+        if not password_regex.match(password):
+            error = "Le mot de passe ne respecte pas les critères de sécurité."
+            return render_template('register.html', error=error)
+
         hashed_password = generate_password_hash(password)
         new_user = User(name=name, surname=surname, dob=dob, deposit=deposit, password=hashed_password)
 
         db.session.add(new_user)
         db.session.commit()
 
-        # Enregistrer un dépôt initial dans l'historique des transactions
         initial_transaction = Transaction(
             user_id=new_user.id,
             transaction_type="Dépôt initial",
@@ -127,6 +133,7 @@ def settings(user_id):
 
 # Mise à jour du solde
 @app.route('/update_balance/<int:user_id>', methods=['POST'])
+@app.route('/update_balance/<int:user_id>', methods=['POST'])
 def update_balance(user_id):
     user = User.query.get(user_id)
     action = request.form['action']
@@ -134,15 +141,14 @@ def update_balance(user_id):
 
     if action == 'add':
         user.deposit += amount
+        transaction_type = "Dépôt"
     elif action == 'subtract':
         if amount > user.deposit:
-            return "Erreur : Solde insuffisant.", 400  # Code d'erreur 400 pour indiquer une mauvaise requête
+            return "Erreur : Solde insuffisant.", 400
         user.deposit -= amount
-
-    # Sauvegarder les modifications
-    db.session.commit()
-    return redirect(url_for('home', user_id=user.id))
-
+        transaction_type = "Retrait"
+    else:
+        return "Action invalide.", 400
 
     # Enregistrer la transaction
     new_transaction = Transaction(
@@ -155,6 +161,7 @@ def update_balance(user_id):
     db.session.commit()
 
     return redirect(url_for('home', user_id=user.id))
+
 
 # Page de déconnexion
 @app.route('/logout')

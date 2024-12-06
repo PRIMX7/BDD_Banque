@@ -42,9 +42,8 @@
             document.getElementById('popup').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
         }
-        // Vérifie si une erreur a été passée depuis Flask
         {% if error %}
-        showPopup("{{ error }}");
+            showPopup("{{ error }}");
         {% endif %}
     </script>
 </body>
