@@ -1,0 +1,366 @@
+/* Corps général */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #74ebd5, #acb6e5); /* Fond dégradé */
+    color: #333;
+    display: flex;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Titre de la banque */
+.bank-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #4a90e2;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Conteneur principal global */
+.main-container {
+    display: flex;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: flex-start; /* Garder tout aligné en haut */
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+/* Conteneur intérieur */
+.container {
+    width: 100%;
+    max-width: 800px; /* Limite de largeur pour un affichage plus net */
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px; /* Ajouter un peu d'espace en haut */
+}
+
+/* Pop-up d'erreur */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.popup button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    background-color: #357ab8;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Section d'accueil avec bordure et ombre */
+.welcome-box {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Bouton de paramètres */
+.btn-settings {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-settings:hover {
+    background-color: #218838;
+}
+
+/* Bouton de retour */
+.btn-back {
+    background-color: #f0ad4e;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-back:hover {
+    background-color: #ec971f;
+}
+
+/* Bouton paramètres */
+.btn-settings {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-settings:hover {
+    background-color: #218838;
+}
+
+/* Champ désactivé (lecture seule) */
+input[disabled] {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 1px solid #ced4da;
+    cursor: not-allowed;
+}
+
+/* Bloc de confirmation */
+#transaction-block {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+#transaction-block.hidden {
+    display: none;
+}
+
+#transaction-block p {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#transaction-block input {
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 50%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#transaction-block button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#confirm-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#confirm-btn:hover {
+    background-color: #218838;
+}
+
+#transaction-block button:nth-child(3) {
+    background-color: #28a745;
+    color: white;
+}
+
+#transaction-block button:nth-child(3):hover {
+    background-color: #c87323;
+}
+
+
+
+/* Solde actuel - Mise en avant sur la page d'accueil */
+body.home-page .welcome-box p {
+    font-size: 1.5em; /* Agrandir le texte pour le solde */
+    font-weight: bold;
+    color: #4a90e2; /* Une couleur verte pour attirer l'attention */
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Ombre légère */
+}
+
+/* Solde actuel - texte en gras */
+body.home-page .welcome-box p strong {
+    font-size: 0.7em; 
+    color: #333; /* Une couleur plus sobre pour le texte fixe */
+}
+
+
+/* Section Historique des transactions */
+.transaction-history {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin-top: 30px; /* Espace supplémentaire pour éloigner le tableau du haut */
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Largeur réduite pour s'assurer qu'il soit centré */
+    margin-left: auto;
+    margin-right: auto; /* Centrer horizontalement */
+    text-align: center;
+}
+
+.transaction-history h2 {
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    color: #4a90e2;
+}
+
+/* Style du tableau */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.history-table th, .history-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+
+.history-table th {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: bold;
+}
+
+.history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.history-table tr:hover {
+    background-color: #e0f7fa;
+}
+
+.history-table td {
+    color: #333;
+}
+
+/* Bouton de déconnexion avec un style propre */
+.logout-box {
+    text-align: center;
+}
+
+.btn-logout {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: #0056b3;
+}
+
+/* Conteneur pour le formulaire */
+.form-container {
+    display: flex;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    width: 100%;
+    height: 100%;
+}
+
+/* Formulaire */
+.form-box {
+    width: 100%;
+    max-width: 400px; /* Limite de la taille du formulaire */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fond légèrement transparent */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px); /* Flou d'arrière-plan pour un effet esthétique */
+}
+
+/* Style des inputs et boutons */
+input, button {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Style des boutons */
+button {
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #357ab8;
+}
+
+/* Liens */
+p {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+}
+
+a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Réduire la taille du formulaire pour les petits écrans */
+@media (max-width: 768px) {
+    .form-box {
+        width: 90%; /* Réduit la largeur pour les écrans plus petits */
+    }
+    input, button {
+        font-size: 0.9em; /* Réduit la taille du texte */
+    }
+}

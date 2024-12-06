@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue {{ user.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="home-page">    
+    <div class="container">
+        <!-- Section d'accueil utilisateur -->
+        <div class="welcome-box">
+            <h1>Bienvenue, {{ user.name }} {{ user.surname }}</h1>
+            <p><strong>Date de naissance :</strong> {{ user.dob }}</p>
+            <p><strong>Solde actuel :</strong> <span id="user-deposit" data-deposit="{{ user.deposit }}">{{ user.deposit }}</span> €</p>
+        </div>
+
+        <!-- Boutons paramètres -->
+        <div class="logout-box">
+            <a href="/settings/{{ user.id }}" class="btn btn-settings">Modifier</a>
+        </div>
+
+        <!-- Formulaire pour les transactions -->
+        <div class="transaction-form">
+            <h2>Gérer votre solde</h2>
+            <button onclick="showTransactionForm('add')" class="btn btn-add">Ajouter de l'argent</button>
+            <button onclick="showTransactionForm('subtract')" class="btn btn-subtract">Retirer de l'argent</button>
+
+            <!-- Bloc de confirmation -->
+            <div id="transaction-block" class="hidden">
+                <p id="transaction-message">Confirmez-vous cette action ?</p>
+                <input type="number" id="transaction-amount" placeholder="Entrez le montant" min="1" step="0.01" required>
+                <button id="confirm-btn" onclick="submitTransaction()">Confirmer</button>
+                <button onclick="hideTransactionForm()">Annuler</button>
+            </div>
+        </div>
+
+        <!-- Historique des transactions -->
+        <div class="transaction-history">
+            <h2>Historique des 10 dernières transactions</h2>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Montant</th>
+                        <th>Solde après transaction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction.date.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                        <td>{{ transaction.transaction_type }}</td>
+                        <td>{{ transaction.amount }} €</td>
+                        <td>{{ transaction.balance_after }} €</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Bouton de déconnexion -->
+        <div class="logout-box">
+            <a href="/logout" class="btn btn-logout">Se déconnecter</a>
+        </div>
+    </div>
+
+    <!-- Script pour gérer le bloc de confirmation -->
+    <script>
+        let transactionType = '';
+
+        function showTransactionForm(action) {
+            transactionType = action;
+            const block = document.getElementById('transaction-block');
+            const message = action === 'add' 
+                ? "Confirmez-vous l'ajout d'argent ?" 
+                : "Confirmez-vous le retrait d'argent ?";
+            document.getElementById('transaction-message').textContent = message;
+            block.classList.remove('hidden'); 
+        }
+
+        function hideTransactionForm() {
+            const block = document.getElementById('transaction-block');
+            block.classList.add('hidden');
+            document.getElementById('transaction-amount').value = ''; // Réinitialise le champ
+        }
+
+        function submitTransaction() {
+            const amount = parseFloat(document.getElementById('transaction-amount').value);
+            const currentBalance = parseFloat(document.getElementById('user-deposit').dataset.deposit);
+
+            if (!amount || isNaN(amount) || amount <= 0) {
+                alert("Veuillez entrer un montant valide.");
+                return;
+            }
+
+            if (transactionType === 'subtract' && amount > currentBalance) {
+                alert("Retrait impossible : le montant dépasse votre solde actuel.");
+                return;
+            }
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/update_balance/{{ user.id }}`;
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = transactionType;
+            form.appendChild(actionInput);
+
+            const amountInput = document.createElement('input');
+            amountInput.type = 'hidden';
+            amountInput.name = 'amount';
+            amountInput.value = amount;
+            form.appendChild(amountInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html>
