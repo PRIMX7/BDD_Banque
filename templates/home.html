@@ -10,19 +10,19 @@
     <div class="container">
         <!-- Section d'accueil utilisateur -->
         <div class="welcome-box">
-            <h1>Bienvenue, {{ user.name }} {{ user.surname }}</h1>
-            <p><strong>Date de naissance :</strong> {{ user.dob }}</p>
-            <p><strong>Solde actuel :</strong> <span id="user-deposit" data-deposit="{{ user.deposit }}">{{ user.deposit }}</span> €</p>
+            <div class="welcome-header">
+                <div>
+                    <h1>Bienvenue, {{ user.name }} {{ user.surname }}</h1>
+                    <p><strong>Date de naissance :</strong> {{ user.dob }}</p>
+                    <p><strong>Solde actuel :</strong> <span id="user-deposit" data-deposit="{{ user.deposit }}">{{ user.deposit }}</span> €</p>
+                </div>
+                <a href="/settings/{{ user.id }}" class="btn btn-settings">Modifier</a>
+            </div>
         </div>
-
-        <!-- Boutons paramètres -->
-        <div class="logout-box">
-            <a href="/settings/{{ user.id }}" class="btn btn-settings">Modifier</a>
-        </div>
-
+        
         <!-- Formulaire pour les transactions -->
         <div class="transaction-form">
-            <h2>Gérer votre solde</h2>
+            <h2><u>Gérer votre solde</u></h2>
             <button onclick="showTransactionForm('add')" class="btn btn-add">Ajouter de l'argent</button>
             <button onclick="showTransactionForm('subtract')" class="btn btn-subtract">Retirer de l'argent</button>
 
@@ -37,7 +37,7 @@
 
         <!-- Historique des transactions -->
         <div class="transaction-history">
-            <h2>Historique des 10 dernières transactions</h2>
+            <h2><u>Historique des 10 dernières transactions</u></h2>
             <table class="history-table">
                 <thead>
                     <tr>

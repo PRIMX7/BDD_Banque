@@ -86,29 +86,22 @@ body {
 }
 
 /* Section d'accueil avec bordure et ombre */
+/* Style pour la boîte de bienvenue */
 .welcome-box {
-    text-align: center;
-    padding: 20px;
-    background-color: #fff;
+    background-color: #cbe2f5;
     border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Bouton de paramètres */
-.btn-settings {
-    background-color: #28a745;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-left: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-settings:hover {
-    background-color: #218838;
+/* Style pour l'en-tête de la boîte de bienvenue */
+.welcome-header {
+    display: flex;
+    justify-content: space-between; /* Espace entre les éléments */
+    align-items: center; /* Aligne verticalement */
 }
 
 /* Bouton de retour */
@@ -130,7 +123,7 @@ body {
 
 /* Bouton paramètres */
 .btn-settings {
-    background-color: #28a745;
+    background-color: #cc8426;
     color: #fff;
     padding: 10px 20px;
     text-decoration: none;
@@ -139,7 +132,7 @@ body {
 }
 
 .btn-settings:hover {
-    background-color: #218838;
+    background-color: #614118;
 }
 
 /* Champ désactivé (lecture seule) */
@@ -282,7 +275,7 @@ body.home-page .welcome-box p strong {
 }
 
 .btn-logout {
-    background-color: #007bff;
+    background-color: #006eff;
     color: #fff;
     padding: 10px 20px;
     text-decoration: none;
