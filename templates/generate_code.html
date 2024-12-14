@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générer un code 2FA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-box">
+            <h1>Votre code 2FA</h1>
+            <p>Code : <strong>{{ code }}</strong></p>
+            <p>Copiez ce code et collez-le dans la page précédente pour continuer.</p>
+        </div>
+    </div>
+</body>
+</html>

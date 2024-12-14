@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification 2FA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-box">
+            <h1>Authentification 2FA</h1>
+            {% if error %}
+            <p class="error-message">{{ error }}</p>
+            {% endif %}
+            <form action="/verify_2fa" method="POST">
+                <label for="code">Entrez votre code 2FA :</label>
+                <input type="text" name="code" required>
+                <button type="submit">Valider</button>
+            </form>
+            <p>Pas encore de code ? <a href="/generate_code" target="_blank">Obtenir le code</a></p>
+        </div>
+    </div>
+</body>
+</html>

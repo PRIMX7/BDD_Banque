@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 
 # Initialiser l'application Flask
 app = Flask(__name__)
+app.secret_key = 'bddpascal'
+
 
 # Configurer la base de données SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -89,11 +92,13 @@ def login():
         user = User.query.filter_by(name=username).first()
 
         if user and check_password_hash(user.password, password):
-            return redirect(url_for('home', user_id=user.id))
+            session['user_id'] = user.id
+            return redirect(url_for('verify_2fa'))  # Redirige vers la vérification 2FA
         else:
             error = "Nom utilisateur ou mot de passe incorrect."
 
     return render_template('login.html', error=error)
+
 
 
 #Bonton Parametres
@@ -162,7 +167,34 @@ def update_balance(user_id):
 
     return redirect(url_for('home', user_id=user.id))
 
+# Générer un code 2FA
+@app.route('/generate_code', methods=['GET'])
+def generate_code():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    code = random.randint(100000, 999999)
+    session['2fa_code'] = code
+    session['2fa_code_expiry'] = (datetime.utcnow() + timedelta(minutes=5)).timestamp()  # Durée de validité : 5 minutes
+    return render_template('generate_code.html', code=code)
 
+
+# Vérifier le code 2FA
+@app.route('/verify_2fa', methods=['GET', 'POST'])
+def verify_2fa():
+    if request.method == 'POST':
+        entered_code = request.form['code']
+        stored_code = session.get('2fa_code')
+        user_id = session.get('user_id')
+
+        if entered_code == str(stored_code):
+            session.pop('2fa_code', None)  # Supprime le code après validation
+            return redirect(url_for('home', user_id=user_id))
+        else:
+            error = "Code incorrect. Veuillez réessayer."
+            return render_template('verify_2fa.html', error=error)
+
+    return render_template('verify_2fa.html')
+    
 # Page de déconnexion
 @app.route('/logout')
 def logout():
