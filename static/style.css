@@ -11,42 +11,22 @@ body {
     padding: 0;
 }
 
-/* Titre de la banque */
-.bank-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 2em;
-    color: #4a90e2;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Conteneur principal global */
-.main-container {
-    display: flex;
-    justify-content: center; /* Centrer horizontalement */
-    align-items: flex-start; /* Garder tout aligné en haut */
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-}
-
 /* Conteneur intérieur */
 .container {
     width: 100%;
-    max-width: 800px; /* Limite de largeur pour un affichage plus net */
+    height: auto;
+    max-width: 1000px; /* Limite de largeur pour un affichage plus net */
     padding: 20px;
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    border-radius: 10px;
+    background-color: #f9f9f9ce;
+    border-radius: 0px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px; /* Ajouter un peu d'espace en haut */
+    margin-top: 300px; /* Ajouter un peu d'espace en haut */
 }
 
-/* Pop-up d'erreur */
 /* Pop-up d'erreur */
 .popup {
     display: none;
@@ -136,7 +116,7 @@ body {
 
 /* Bouton de retour */
 .btn-back {
-    background-color: #f0ad4e;
+    background-color: #0202028a;
     color: #fff;
     padding: 10px 20px;
     text-decoration: none;
@@ -148,12 +128,12 @@ body {
 }
 
 .btn-back:hover {
-    background-color: #ec971f;
+    background-color: #000000;
 }
 
 /* Bouton paramètres */
 .btn-settings {
-    background-color: #cc8426;
+    background-color: #00000085;
     color: #fff;
     padding: 10px 20px;
     text-decoration: none;
@@ -162,7 +142,7 @@ body {
 }
 
 .btn-settings:hover {
-    background-color: #614118;
+    background-color: #000000;
 }
 
 /* Champ désactivé (lecture seule) */
@@ -211,46 +191,27 @@ input[disabled] {
 }
 
 #confirm-btn {
-    background-color: #28a745;
-    color: white;
+    background-color: #28a746c0;
+    color: rgb(0, 0, 0);
 }
 
 #confirm-btn:hover {
-    background-color: #218838;
+    background-color: #218837b6;
 }
 
 #transaction-block button:nth-child(3) {
-    background-color: #28a745;
-    color: white;
+    background-color: #28a7468f;
+    color: rgb(0, 0, 0);
 }
 
 #transaction-block button:nth-child(3):hover {
-    background-color: #c87323;
+    background-color: #0f7a1dcc;
 }
-
-
-
-/* Solde actuel - Mise en avant sur la page d'accueil */
-body.home-page .welcome-box p {
-    font-size: 1.5em; /* Agrandir le texte pour le solde */
-    font-weight: bold;
-    color: #4a90e2; /* Une couleur verte pour attirer l'attention */
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Ombre légère */
-}
-
-/* Solde actuel - texte en gras */
-body.home-page .welcome-box p strong {
-    font-size: 0.7em; 
-    color: #333; /* Une couleur plus sobre pour le texte fixe */
-}
-
 
 /* Section Historique des transactions */
 .transaction-history {
     padding: 20px;
-    background-color: #fff;
+    background-color: #ffffff6c;
     border-radius: 10px;
     margin-top: 30px; /* Espace supplémentaire pour éloigner le tableau du haut */
     margin-bottom: 20px;
@@ -277,7 +238,7 @@ body.home-page .welcome-box p strong {
 .history-table th, .history-table td {
     padding: 12px 15px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid #ffffff;
     font-size: 1em;
 }
 
@@ -288,11 +249,11 @@ body.home-page .welcome-box p strong {
 }
 
 .history-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #adb3e936;
 }
 
 .history-table tr:hover {
-    background-color: #e0f7fa;
+    background-color: #002aff3b;
 }
 
 .history-table td {
@@ -305,7 +266,7 @@ body.home-page .welcome-box p strong {
 }
 
 .btn-logout {
-    background-color: #006eff;
+    background-color: #ff6c6c;
     color: #fff;
     padding: 10px 20px;
     text-decoration: none;
@@ -314,7 +275,7 @@ body.home-page .welcome-box p strong {
 }
 
 .btn-logout:hover {
-    background-color: #0056b3;
+    background-color: #ff0000;
 }
 
 /* Conteneur pour le formulaire */
@@ -350,8 +311,8 @@ input, button {
 
 /* Style des boutons */
 button {
-    background-color: #4a90e2;
-    color: #fff;
+    background-color: #4a91e2ab;
+    color: #000000;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -374,10 +335,6 @@ a {
     font-weight: bold;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
 /* Réduire la taille du formulaire pour les petits écrans */
 @media (max-width: 768px) {
     .form-box {
@@ -386,4 +343,19 @@ a:hover {
     input, button {
         font-size: 0.9em; /* Réduit la taille du texte */
     }
+}
+
+/* Couleur de la police pour les transactions */
+.transaction-bank td {
+    color: #28a745; /* Vert pour "Transfert vers Banque" */
+    font-weight: bold;
+}
+
+.transaction-wallet td {
+    color: #dc3545; /* Rouge pour "Transfert vers Wallet" */
+    font-weight: bold;
+}
+
+.spacer {
+    height: 30px; /* Ajuste la hauteur selon tes besoins */
 }

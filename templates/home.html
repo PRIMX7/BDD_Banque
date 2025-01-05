@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenue {{ user.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function toggleWalletDetails() {
+            const walletPopup = document.getElementById("wallet-popup");
+            const overlay = document.getElementById("overlay");
+            const isHidden = walletPopup.style.display === "none";
+
+            walletPopup.style.display = isHidden ? "block" : "none";
+            overlay.style.display = isHidden ? "block" : "none";
+        }
+    </script>
 </head>
-<body class="home-page">    
+<body>
     <div class="container">
         <!-- Section d'accueil utilisateur -->
         <div class="welcome-box">
@@ -15,11 +25,27 @@
                     <h1>Bienvenue, {{ user.name }} {{ user.surname }}</h1>
                     <p><strong>Date de naissance :</strong> {{ user.dob }}</p>
                     <p><strong>Solde actuel :</strong> <span id="user-deposit" data-deposit="{{ user.deposit }}">{{ user.deposit }}</span> €</p>
+                    <p><strong>Solde wallet :</strong> <span id="wallet-amount" data-amount="{{ wallet.amount }}">{{ wallet.amount }} €</span>
                 </div>
-                <a href="/settings/{{ user.id }}" class="btn btn-settings">Modifier les informations</a>
+                <a href="/settings/{{ user.id }}" class="btn btn-settings">Modifier</a>
             </div>
         </div>
-        
+
+        <!-- Bouton Wallet -->
+        <div class="wallet-button-container">
+            <button onclick="toggleWalletDetails()" class="btn btn-wallet">Wallet</button>
+        </div>
+
+        <!-- Div pour afficher le Wallet -->
+        <div id="wallet-details" class="wallet-popup" style="display:none;">
+            <h3>Informations du Wallet</h3>
+            <p><strong>ID du Wallet :</strong> {{ wallet.id }}</p>
+            <p><strong>Nom :</strong> {{ wallet.name }}</p>
+            <p><strong>Prénom :</strong> {{ wallet.surname }}</p>
+            <p><strong>Date de naissance :</strong> {{ wallet.dob }}</p>
+            <p><strong>Montant :</strong> {{ wallet.amount }} €</p>
+        </div>
+
         <!-- Formulaire pour les transactions -->
         <div class="transaction-form">
             <h2><u>Gérer votre solde</u></h2>
@@ -49,23 +75,62 @@
                 </thead>
                 <tbody>
                     {% for transaction in transactions %}
-                    <tr>
+                    <tr class="{{ 'transaction-bank' if transaction.transaction_type == 'Transfert vers Banque' else 'transaction-wallet' }}">
                         <td>{{ transaction.date.strftime('%d/%m/%Y %H:%M:%S') }}</td>
                         <td>{{ transaction.transaction_type }}</td>
-                        <td>{{ transaction.amount }} €</td>
+                        <td>
+                            {{ '+' if transaction.transaction_type == 'Transfert vers Banque' else '-' }}
+                            {{ transaction.amount }} €
+                        </td>
                         <td>{{ transaction.balance_after }} €</td>
                     </tr>
                     {% endfor %}
-                </tbody>
+                </tbody>                                              
             </table>
         </div>
+
+        <!-- Ajouter un espace -->
+        <div class="spacer"></div>
 
         <!-- Bouton de déconnexion -->
         <div class="logout-box">
             <a href="/logout" class="btn btn-logout">Se déconnecter</a>
         </div>
-    </div>
 
+        <!-- Ajouter un espace -->
+        <div class="spacer"></div>
+
+        <!-- Pop-up À propos -->
+        <div id="about-popup" class="popup hidden">
+            <h3><u>À propos de La Banque Pascal</u></h3>
+            <p>La Banque Pascal est une banque en ligne innovante, mettant l'accent sur la sécurité et la simplicité. Notre mission est de vous offrir une gestion transparente de vos finances, avec des fonctionnalités modernes telles que le Wallet et la double authentification 2FA.</p>
+            <p><strong>Contact :</strong> contact@labanquepascal.com</p>
+            <p><strong>Adresse :</strong> 123 Rue de la Fintech, 34000 Montpellier, France</p>
+
+            <h3><u>Mentions légales</u></h3>
+            <p><strong>Éditeur :</strong> La Banque Pascal, 123 Rue de la Fintech, 34000 Montpellier, France.</p>
+            <p><strong>Responsable de la publication :</strong> Pascal Compagny.</p>
+            <p><strong>Hébergement :</strong> Serveurs sécurisés situés en Europe, conformes aux normes GDPR.</p>
+            <p><strong>Propriété intellectuelle :</strong> Toutes les informations présentes sur ce site sont la propriété exclusive de La Banque Pascal. Toute reproduction, totale ou partielle, est interdite sans autorisation préalable.</p>
+            
+            <h3><u>Politique de confidentialité</u></h3>
+            <p><strong>Collecte des données :</strong> Nous collectons uniquement les données nécessaires à la création et à la gestion de votre compte bancaire (nom, prénom, date de naissance et mot de passe).</p>
+            <p><strong>Utilisation des données :</strong> Les données sont utilisées exclusivement pour la gestion de vos transactions financières et ne sont jamais partagées avec des tiers.</p>
+            <p><strong>Sécurité des données :</strong> La Banque Pascal met en œuvre toutes les mesures nécessaires pour garantir la sécurité de vos données, y compris le cryptage des mots de passe et la double authentification.</p>
+            <p><strong>Droits de l'utilisateur :</strong> Vous avez le droit de consulter, modifier ou supprimer vos données personnelles à tout moment en nous contactant à l'adresse suivante : <a href="mailto:privacy@labanquepascal.com">privacy@labanquepascal.com</a>.</p>
+
+            <button onclick="closeAboutPopup()">Fermer</button>
+        </div>
+        <div class="overlay hidden" id="overlay"></div>
+
+        <!-- Barre des mentions légales -->
+        <footer class="footer">
+            <p>&copy; 2025 La Bank Pascal. Tous droits réservés. 
+                <a href="#" onclick="showAboutPopup()">À propos</a>
+            </p>
+        </footer>        
+    </div>
+    
     <!-- Script pour gérer le bloc de confirmation -->
     <script>
         let transactionType = '';
@@ -89,6 +154,8 @@
         function submitTransaction() {
             const amount = parseFloat(document.getElementById('transaction-amount').value);
             const currentBalance = parseFloat(document.getElementById('user-deposit').dataset.deposit);
+            const walletBalance = parseFloat(document.getElementById('wallet-amount').dataset.amount); // Ajouté pour le wallet
+
 
             if (!amount || isNaN(amount) || amount <= 0) {
                 alert("Veuillez entrer un montant valide.");
@@ -99,6 +166,11 @@
                 alert("Retrait impossible : le montant dépasse votre solde actuel.");
                 return;
             }
+
+            if (transactionType === 'add' && amount > walletBalance) {
+            alert("Ajout impossible : le montant dépasse votre solde dans le wallet.");
+            return;
+        }
 
             const form = document.createElement('form');
             form.method = 'POST';
@@ -119,6 +191,21 @@
             document.body.appendChild(form);
             form.submit();
         }
+
+        function toggleWalletDetails() {
+        const walletDetails = document.getElementById("wallet-details");
+        walletDetails.style.display = walletDetails.style.display === "none" ? "block" : "none";
+    }
+
+    function showAboutPopup() {
+        document.getElementById("about-popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function closeAboutPopup() {
+        document.getElementById("about-popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
     </script>
 </body>
 </html>
